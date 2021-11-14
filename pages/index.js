@@ -13,8 +13,8 @@ export default function Home() {
     const [password, setPassword] = React.useState('');
     const router = useRouter();
 
-    const submitButton = () => {
-        const loggedIn = login(username, password);
+    const submitButton = async () => {
+        const loggedIn = await login(username, password);
 
         if (loggedIn) {
             router.push('/input-page');
