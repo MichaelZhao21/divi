@@ -6,7 +6,7 @@ function Logo(props) {
     const router = useRouter();
 
     const handleClick = () => {
-        router.push('/input-page');
+        router.push('/');
     };
 
     return (

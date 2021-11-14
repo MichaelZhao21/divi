@@ -14,7 +14,7 @@ export default class MyDocument extends Document {
                         rel="stylesheet"
                         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,800,900&display=swap"
                     />
-                    <title>DIVI | Digital Insurance for Virtual Investments</title>
+                    <link rel="icon" href="/favicon.ico" />
                 </Head>
                 <body style={{ backgroundColor: '#dee4e5' }}>
                     <Main />
