@@ -23,12 +23,21 @@ exports.checkName = functions.https.onRequest(async (request, response) => {
                 const microtransactionRisk = doc.get('microtransactions') / 35.56;
                 const ageRisk = 0.01 * Math.pow(Math.E, 0.384 * doc.get('accountAge'));
                 const risk = (rarityRisk + microtransactionRisk + ageRisk) / 3.0;
+                if(doc.get('rarity') == 1) {
+                    const minCost = 1 + (doc.get('microtransactions') / 250) + (3 * ageRisk);
+                    const maxCost = 2 + (2 * (doc.get('microtransactions') / 250)) + (5 * ageRisk);
+                } else {
+                    const minCost = 2 + (doc.get('microtransactions') / 250) + (3 * ageRisk);
+                    const maxCost = 4 + (2 * (doc.get('microtransactions') / 250)) + (5 * ageRisk);
+                }
                 response.send({
                     ok: 1,
                     rarity: doc.get('rarity'),
                     microtransactions: doc.get('microtransactions'),
                     accountAge: doc.get('accountAge'),
                     risk,
+                    minCost,
+                    maxCost,
                 });
             } else {
                 // doc.data() will be undefined in this case
