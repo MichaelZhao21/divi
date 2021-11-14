@@ -9,7 +9,7 @@ exports.checkName = functions.https.onRequest(async (request, response) => {
     db.collection('names')
     var nameRef = db.collection("names");
     var query = nameRef.where("username", "==", "h4ck3rm4n");
-    nameRef.get()
+    query.get()
         .then((doc) => {
             if (doc.exists) {
                 console.log("Fetching data:");
