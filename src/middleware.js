@@ -3,6 +3,14 @@ export function login(username, password) {
 }
 
 export async function getRisk(summoner) {
-    // TODO: Replace with API call
-    return { rarity: 2, microtransactions: 2341, accountAge: 3 };
+    try {
+        const response = await fetch(
+            `https://us-central1-digital-insurance-9d3bd.cloudfunctions.net/checkName?name=${summoner}`
+        ).then((res) => res.json());
+        console.log(response);
+        return response;
+    } catch (err) {
+        console.log(err);
+        return null;
+    }
 }

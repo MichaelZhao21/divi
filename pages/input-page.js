@@ -44,9 +44,10 @@ export default function InputPage() {
             setError(true);
             return;
         }
+        console.log(response);
         router.push({
             pathname: '/output-page',
-            query: { data: response },
+            query: { data: new URLSearchParams(response).toString() },
         });
     };
 

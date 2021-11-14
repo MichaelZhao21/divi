@@ -1,13 +1,18 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { Box, Button, Card, CardContent, Grid, Paper } from '@mui/material';
 import Logo from '../src/Logo';
 import { useRouter } from 'next/dist/client/router';
+import qs from 'querystring';
 
 export default function InputPage() {
-    const [data, setData] = React.useState(null);
+    const [risk, setRisk] = React.useState('00.0');
+    const [minCost, setMinCost] = React.useState('0.00');
+    const [maxCost, setMaxCost] = React.useState('0.00');
+    const [rarity, setRarity] = React.useState('0');
+    const [microtransactions, setMicrotransactions] = React.useState('0');
+    const [accountAge, setAccountAge] = React.useState('0');
     const router = useRouter();
 
     const backButton = () => {
@@ -16,9 +21,23 @@ export default function InputPage() {
 
     React.useEffect(() => {
         if (!router.query.data) return;
-        setData(JSON.parse(router.query.data));
+        console.log(router.query.data);
+        const data = JSON.parse(
+            '{"' +
+                decodeURI(router.query.data)
+                    .replace(/"/g, '\\"')
+                    .replace(/&/g, '","')
+                    .replace(/=/g, '":"') +
+                '"}'
+        );
         console.log(data);
-    }, []);
+        setRisk(Number(data.risk).toFixed(1));
+        setMinCost(Number(data.minCost).toFixed(2));
+        setMaxCost(Number(data.maxCost).toFixed(2));
+        setRarity(data.rarity);
+        setMicrotransactions(data.microtransactions);
+        setAccountAge(data.accountAge);
+    }, [router.query.data]);
 
     return (
         <Container maxWidth="sm" sx={{ marginTop: '2rem' }}>
@@ -61,7 +80,7 @@ export default function InputPage() {
                                 }}
                             >
                                 <Typography variant="h1" component="h3" sx={{ height: '7rem' }}>
-                                    00
+                                    {risk}
                                 </Typography>
                                 <Typography variant="p" component="h3" sx={{ color: '#aaa' }}>
                                     Risk
@@ -80,9 +99,9 @@ export default function InputPage() {
                                 <Typography
                                     variant="h1"
                                     component="h3"
-                                    sx={{ fontSize: '5rem', height: '6.5rem', marginTop: '0.5rem' }}
+                                    sx={{ fontSize: '3rem', height: '7rem' }}
                                 >
-                                    00-00
+                                    {minCost} -<br />{maxCost}
                                 </Typography>
                                 <Typography variant="p" component="h3" sx={{ color: '#aaa' }}>
                                     $/Month
@@ -92,17 +111,35 @@ export default function InputPage() {
                     </Grid>
                     <Card elevation={3} sx={{ marginTop: '0.5rem' }}>
                         <CardContent>
-                            <Typography variant="h6" component="p" sx={{ color: 'black', paddingTop: '8px' }}>Rarity of Items: 0</Typography>
+                            <Typography
+                                variant="h6"
+                                component="p"
+                                sx={{ color: 'black', paddingTop: '8px' }}
+                            >
+                                Rarity of Items: {rarity}
+                            </Typography>
                         </CardContent>
                     </Card>
                     <Card elevation={3} sx={{ marginTop: '0.5rem' }}>
                         <CardContent>
-                            <Typography variant="h6" component="p" sx={{ color: 'black', paddingTop: '8px' }}>Microtransactions: $0</Typography>
+                            <Typography
+                                variant="h6"
+                                component="p"
+                                sx={{ color: 'black', paddingTop: '8px' }}
+                            >
+                                Microtransactions: ${microtransactions}
+                            </Typography>
                         </CardContent>
                     </Card>
                     <Card elevation={3} sx={{ marginTop: '0.5rem' }}>
                         <CardContent>
-                            <Typography variant="h6" component="p" sx={{ color: 'black', paddingTop: '8px' }}>Account Age: 0</Typography>
+                            <Typography
+                                variant="h6"
+                                component="p"
+                                sx={{ color: 'black', paddingTop: '8px' }}
+                            >
+                                Account Age: {accountAge}
+                            </Typography>
                         </CardContent>
                     </Card>
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
