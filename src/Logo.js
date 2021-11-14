@@ -1,9 +1,22 @@
 import * as React from 'react';
 import SvgIcon from '@mui/material/SvgIcon';
+import { useRouter } from 'next/dist/client/router';
 
 function Logo(props) {
+    const router = useRouter();
+
+    const handleClick = () => {
+        router.push('/input-page');
+    };
+
     return (
-        <SvgIcon {...props} width="153" height="171" viewBox="0 0 153 171">
+        <SvgIcon
+            {...props}
+            width="153"
+            height="171"
+            viewBox="0 0 153 171"
+            onClick={handleClick}
+        >
             <path
                 d="M101.5 68.75H50.75V119.5H101.5V68.75ZM84.5833 102.583H67.6667V85.6667H84.5833V102.583ZM152.25 85.6667V68.75H135.333V34.9167H101.5L101.432 22.9328C92.9739 22.9328 84.5833 22.9308 84.5833 22.9308V34.9167H67.6667V23.0938H50.75V34.9167H16.9167V68.75H0V85.6667H16.9167V102.583H0V119.5H16.9167V153.333H50.75V170.25H67.6667V153.333H84.5833V170.25H101.5V153.333H135.333V119.5H152.25V102.583H135.333V85.6667H152.25ZM118.417 136.417H33.8333V51.8333H118.417V136.417Z"
                 fill="url(#paint0_linear_10_25)"
