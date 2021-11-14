@@ -69,7 +69,7 @@ exports.checkLogin = functions.https.onRequest(async (request, response) => {
         .then((querySnapshot) => {
             if (!querySnapshot.empty) {
                 const doc = querySnapshot.docs[0];
-                success++;
+                success += 2;
             } else {
                 // doc.data() will be undefined in this case
                 response.send({ msg: 'No such document!', ok: 0 });
@@ -80,7 +80,7 @@ exports.checkLogin = functions.https.onRequest(async (request, response) => {
             response.send({ msg: 'Error getting document:', ok: 0 });
         });
 
-    query2
+    /* query2
         .get()
         .then((querySnapshot) => {
             if (!querySnapshot.empty) {
@@ -95,7 +95,7 @@ exports.checkLogin = functions.https.onRequest(async (request, response) => {
             functions.logger.error('Error getting document:', error);
             response.send({ msg: 'Error getting document:', ok: 0 });
         });
-
+*/
     if ( success == 2) {
         response.send({
             ok: 1,
