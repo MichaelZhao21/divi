@@ -20,9 +20,9 @@ exports.checkName = functions.https.onRequest(async (request, response) => {
             if (!querySnapshot.empty) {
                 // Should always be one item long due to the unique summoner name
                 const doc = querySnapshot.docs[0];
-                const rarityRisk = 0.6165 * Math.log(doc.get('rarity')) + 0.261;
+                const rarityRisk = 61.65 * Math.log(doc.get('rarity')) + 32.27;
                 const microtransactionRisk = doc.get('microtransactions') / 35.56;
-                const ageRisk = 0.01 * Math.pow(Math.E, 0.384 * doc.get('accountAge'));
+                const ageRisk = Math.pow(Math.E, 0.384 * doc.get('accountAge'));
                 const risk = (rarityRisk + microtransactionRisk + ageRisk) / 3.0;
 
                 response.send({
