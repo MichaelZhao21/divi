@@ -22,8 +22,8 @@ function Logo(props) {
                     y2="170.25"
                     gradientUnits="userSpaceOnUse"
                 >
-                    <stop stop-color="#86CBFC" />
-                    <stop offset="1" stop-color="#017FDA" />
+                    <stop stopColor="#86CBFC" />
+                    <stop offset="1" stopColor="#017FDA" />
                 </linearGradient>
                 <linearGradient
                     id="paint1_linear_10_25"
@@ -33,8 +33,8 @@ function Logo(props) {
                     y2="29.0817"
                     gradientUnits="userSpaceOnUse"
                 >
-                    <stop stop-color="#B7E1FF" />
-                    <stop offset="1" stop-color="#7BC4F9" />
+                    <stop stopColor="#B7E1FF" />
+                    <stop offset="1" stopColor="#7BC4F9" />
                 </linearGradient>
             </defs>
         </SvgIcon>
