@@ -16,12 +16,12 @@ exports.checkName = functions.https.onRequest(async (request, response) => {
                 const rarityRisk = (0.6165 * Math.log(doc.get("rarity")) + 0.261);
                 const microtransactionRisk = (35.56 * doc.get("microtransactions"));
                 const ageRisk = (0.01 * Math.pow(e, 0.384) * doc.get("accountAge"));
-                response.send({ rarity: doc.get("rarity"), microtransactions: doc.get("microtransactions"), accountAge: doc.get("accountAge") });
+                response.send({ok: 1, rarity: doc.get("rarity"), microtransactions: doc.get("microtransactions"), accountAge: doc.get("accountAge") });
             } else {
                 // doc.data() will be undefined in this case
-                response.send("No such document!");
+                response.send({msg: "No such document!", ok: 0});
             }
         }).catch((error) => {
-            response.send("Error getting document:", error);
+            response.send({msg: "Error getting document:", ok: 0});
         });
 });
