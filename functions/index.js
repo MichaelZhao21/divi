@@ -44,3 +44,57 @@ exports.checkName = functions.https.onRequest(async (request, response) => {
             response.send({ msg: 'Error getting document:', ok: 0 });
         });
 });
+
+
+exports.checkLogin = functions.https.onRequest(async (request, response) => {
+    response.set('Access-Control-Allow-Origin', '*');
+    if (request.query.username === null) {
+        response.send({ msg: 'No name provided', ok: 0 });
+        if (requestAnimationFrame.query.password === null) {
+            response.send({ msg: 'No password provided', ok:0});
+        }
+        return;
+    } else if (request.query.password === null) {
+        response.send({ msg: 'No password provided', ok: 0});
+        return;
+    }
+    const db = admin.firestore();
+    const nameRef = db.collection('login');
+    const query1 = nameRef.where('username', '==', request.query.username);
+    const query2 = nameRef.where('password', '==', request.query.password);
+    query1
+        .get()
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                response.send({
+                    ok: 1,
+                    username: doc.get('username'),
+                });
+            } else {
+                // doc.data() will be undefined in this case
+                response.send({ msg: 'No such document!', ok: 0 });
+            }
+        })
+        .catch((error) => {
+            functions.logger.error('Error getting document:', error);
+            response.send({ msg: 'Error getting document:', ok: 0 });
+        });
+    
+    query2
+        .get()
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                response.send({
+                    ok: 1,
+                    password: doc.get('password'),
+                });
+            } else {
+                // doc.data() will be undefined in this case
+                response.send({ msg: 'No such document!', ok: 0 });
+            }
+        })
+        .catch((error) => {
+            functions.logger.error('Error getting document:', error);
+            response.send({ msg: 'Error getting document:', ok: 0 });
+        });
+});
