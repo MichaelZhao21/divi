@@ -52,7 +52,7 @@ export default function Home() {
                             width: 'fit-content',
                         }}
                     >
-                        Digital Investment
+                        DIVI
                     </Typography>
                     <Typography
                         variant="p"
@@ -64,8 +64,8 @@ export default function Home() {
                             marginBottom: '1rem',
                         }}
                     >
-                        A portal that assists employees in risk analysis, pricing, and comparison of
-                        digital assets.
+                        Digital Insurance for Virtual Investments -- A portal that assists employees
+                        in risk analysis, pricing, and comparison of digital assets.
                     </Typography>
                     <Container maxWidth="xs" sx={{ marginTop: '3rem' }}>
                         <TextField
