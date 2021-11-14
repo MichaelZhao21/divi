@@ -3,25 +3,40 @@ const admin = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
 
+// https://us-central1-digital-insurance-9d3bd.cloudfunctions.net/checkName?name=h4ck3rm4n
 exports.checkName = functions.https.onRequest(async (request, response) => {
-    var db = admin.firestore();
+    if (request.query.name === null) {
+        response.send({ msg: 'No name provided', ok: 0 });
+        return;
+    }
 
-    db.collection('names')
-    var nameRef = db.collection("names");
-    var query = nameRef.where("username", "==", "h4ck3rm4n");
-    query.get()
-        .then((doc) => {
-            if (doc.exists) {
-                console.log("Fetching data:");
-                const rarityRisk = (0.6165 * Math.log(doc.get("rarity")) + 0.261);
-                const microtransactionRisk = (35.56 * doc.get("microtransactions"));
-                const ageRisk = (0.01 * Math.pow(e, 0.384) * doc.get("accountAge"));
-                response.send({ok: 1, rarity: doc.get("rarity"), microtransactions: doc.get("microtransactions"), accountAge: doc.get("accountAge") });
+    const db = admin.firestore();
+    const nameRef = db.collection('names');
+    const query = nameRef.where('username', '==', request.query.name);
+    query
+        .get()
+        .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                // Should always be one item long due to the unique summoner name
+                const doc = querySnapshot.docs[0];
+                const rarityRisk = 0.6165 * Math.log(doc.get('rarity')) + 0.261;
+                const microtransactionRisk = doc.get('microtransactions') / 35.56;
+                const ageRisk = 0.01 * Math.pow(Math.E, 0.384 * doc.get('accountAge'));
+                const risk = (rarityRisk + microtransactionRisk + ageRisk) / 3.0;
+                response.send({
+                    ok: 1,
+                    rarity: doc.get('rarity'),
+                    microtransactions: doc.get('microtransactions'),
+                    accountAge: doc.get('accountAge'),
+                    risk,
+                });
             } else {
                 // doc.data() will be undefined in this case
-                response.send({msg: "No such document!", ok: 0});
+                response.send({ msg: 'No such document!', ok: 0 });
             }
-        }).catch((error) => {
-            response.send({msg: "Error getting document:", ok: 0});
+        })
+        .catch((error) => {
+            functions.logger.error('Error getting document:', error);
+            response.send({ msg: 'Error getting document:', ok: 0 });
         });
 });
