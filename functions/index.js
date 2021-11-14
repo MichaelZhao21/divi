@@ -14,6 +14,7 @@ exports.checkName = functions.https.onRequest(async(request, response) => {
                 console.log("Fetching data:");
                 const rarityRisk = (0.6165 * Math.log(doc.get("rarity")) + 0.261);
                 const microtransactionRisk = (35.56 * doc.get("microtransactions"));
+                const ageRisk = (0.01 * Math.pow(e,0.384) * doc.get("accountAge"));
                 response.send({rarity: doc.get("rarity"), microtransactions: doc.get("microtransactions"), accountAge: doc.get("accountAge")});
             } else {
                 // doc.data() will be undefined in this case
