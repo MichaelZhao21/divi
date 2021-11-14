@@ -2,6 +2,8 @@
 
 Digital Insurance for Virtual Investments -- A simple portal that assists employees in risk analysis, pricing, and comparison of digital assets! Project was created for hackUTD 2021. 
 
+**Devpost Link**: https://devpost.com/software/digital-insurance-for-virtual-investments-divi
+
 ## Inspiration
 In a world of emerging technology, digital assets are becoming a larger and larger part of the everyday life of people across the globe. As people pour more and more into these products, the looming risk of losing it all slowly creeps up behind them. Thus, we came up with DIVI, as a means to counteract these ever-growing dangers.
 
