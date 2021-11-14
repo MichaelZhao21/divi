@@ -62,14 +62,14 @@ exports.checkLogin = functions.https.onRequest(async (request, response) => {
     const nameRef = db.collection('login');
     const query1 = nameRef.where('username', '==', request.query.username);
     const query2 = nameRef.where('password', '==', request.query.password);
+    var success = 0;
+
     query1
         .get()
         .then((querySnapshot) => {
             if (!querySnapshot.empty) {
-                response.send({
-                    ok: 1,
-                    username: doc.get('username'),
-                });
+                const doc = querySnapshot.docs[0];
+                success++;
             } else {
                 // doc.data() will be undefined in this case
                 response.send({ msg: 'No such document!', ok: 0 });
@@ -79,15 +79,13 @@ exports.checkLogin = functions.https.onRequest(async (request, response) => {
             functions.logger.error('Error getting document:', error);
             response.send({ msg: 'Error getting document:', ok: 0 });
         });
-    
+
     query2
         .get()
         .then((querySnapshot) => {
             if (!querySnapshot.empty) {
-                response.send({
-                    ok: 1,
-                    password: doc.get('password'),
-                });
+                const doc2 = querySnapshot.docs[0];
+                success++;
             } else {
                 // doc.data() will be undefined in this case
                 response.send({ msg: 'No such document!', ok: 0 });
@@ -97,4 +95,12 @@ exports.checkLogin = functions.https.onRequest(async (request, response) => {
             functions.logger.error('Error getting document:', error);
             response.send({ msg: 'Error getting document:', ok: 0 });
         });
+
+    if ( success == 2) {
+        response.send({
+            ok: 1,
+            username: doc.get('username'),
+            password: doc2.get('password'),
+        });
+    }
 });
