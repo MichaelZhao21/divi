@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import { Box, Button, Card, CardContent, Grid, Paper } from '@mui/material';
 import Logo from '../src/Logo';
 import { useRouter } from 'next/dist/client/router';
-import qs from 'querystring';
 
 export default function InputPage() {
     const [risk, setRisk] = React.useState('00.0');
@@ -13,6 +12,7 @@ export default function InputPage() {
     const [rarity, setRarity] = React.useState('0');
     const [microtransactions, setMicrotransactions] = React.useState('0');
     const [accountAge, setAccountAge] = React.useState('0');
+    const [bg, setBg] = React.useState('#ffffff');
     const router = useRouter();
 
     const backButton = () => {
@@ -37,6 +37,10 @@ export default function InputPage() {
         setRarity(data.rarity);
         setMicrotransactions(data.microtransactions);
         setAccountAge(data.accountAge);
+        if (data.risk < 30) setBg('#b5f78f');
+        else if (data.risk < 50) setBg('#f7ee8f');
+        else if (data.risk < 70) setBg('#f7c18f');
+        else setBg('#f78f8f');
     }, [router.query.data]);
 
     return (
@@ -77,6 +81,7 @@ export default function InputPage() {
                                     padding: (theme) => theme.spacing(1),
                                     textAlign: 'center',
                                     color: (theme) => theme.palette.text.secondary,
+                                    backgroundColor: bg,
                                 }}
                             >
                                 <Typography variant="h1" component="h3" sx={{ height: '7rem' }}>

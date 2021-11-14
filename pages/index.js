@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { Button, Card, CardContent, TextField } from '@mui/material';
+import { Backdrop, Button, Card, CardContent, CircularProgress, TextField } from '@mui/material';
 import Logo from '../src/Logo';
 import { Box } from '@mui/system';
 import { login } from '../src/middleware';
@@ -11,20 +11,29 @@ export default function Home() {
     const [error, setError] = React.useState(false);
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [submitted, setSubmitted] = React.useState(false);
     const router = useRouter();
 
     const submitButton = async () => {
+        setSubmitted(true);
         const loggedIn = await login(username, password);
 
         if (loggedIn) {
             router.push('/input-page');
-        } else {
+    } else {
             setError(true);
+            setSubmitted(false);
         }
     };
 
     return (
         <Container maxWidth="sm" sx={{ marginTop: '2rem' }}>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={submitted}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Card
                 sx={{
                     minWidth: 254,
