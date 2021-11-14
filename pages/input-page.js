@@ -2,10 +2,12 @@ import * as React from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import {
+    Backdrop,
     Box,
     Button,
     Card,
     CardContent,
+    CircularProgress,
     FormControl,
     InputLabel,
     MenuItem,
@@ -14,6 +16,7 @@ import {
 } from '@mui/material';
 import Logo from '../src/Logo';
 import { useRouter } from 'next/dist/client/router';
+import { getRisk } from '../src/middleware';
 
 export default function InputPage() {
     const [name, setName] = React.useState('');
@@ -21,6 +24,8 @@ export default function InputPage() {
     const [type, setType] = React.useState(null);
     const [summoner, setSummoner] = React.useState('');
     const [buttonOn, setButtonOn] = React.useState(false);
+    const [submitted, setSubmitted] = React.useState(false);
+    const [error, setError] = React.useState(false);
     const router = useRouter();
 
     const handleChange = (event) => {
@@ -31,12 +36,28 @@ export default function InputPage() {
         setButtonOn(name !== '' && email !== '' && summoner !== '');
     }, [name, email, summoner]);
 
-    const submitButton = () => {
-        router.push('/output-page');
-    }
+    const submitButton = async () => {
+        setSubmitted(true);
+        const response = await getRisk(summoner);
+        setSubmitted(false);
+        if (response === null) {
+            setError(true);
+            return;
+        }
+        router.push({
+            pathname: '/output-page',
+            query: { data: response },
+        });
+    };
 
     return (
         <Container maxWidth="sm" sx={{ marginTop: '2rem' }}>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={submitted}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Card
                 sx={{
                     minWidth: 254,
@@ -138,7 +159,13 @@ export default function InputPage() {
                             </Box>
                         </CardContent>
                     </Card>
-
+                    {error ? (
+                        <Typography variant="p" sx={{ color: 'red' }}>
+                            <br />
+                            Unable to fetch the user data. Make sure the user name is correct and
+                            the internet is connected properly.
+                        </Typography>
+                    ) : null}
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                         <Button
                             variant="contained"
