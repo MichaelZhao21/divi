@@ -3,27 +3,23 @@ const admin = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
 
-exports.checkName = functions.https.onRequest((request, response) => {
+exports.checkName = functions.https.onRequest(async(request, response) => {
     var db = admin.firestore();
 
     db.collection('names')
-        .add({
-            first: 'William',
-            last: 'Jetson',
-            born: 1978,
-        })
-        .then((docRef) => {
-            functions.logger.info('Document written with ID: ', docRef.id);
-        })
-        .catch((error) => {
-            functions.logger.error('Error adding document: ', error);
-        });
-
-    db.collection('names')
-        .get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                functions.logger.info(`${doc.id} => ${doc.data()}`);
+        var nameRef = db.collection("names").doc("h4ck3rm4n");
+        nameRef.get()
+        .then((doc) => {
+            if (doc.exists) {
+                console.log("Fetching data:");
+                const rarityRisk = (0.6165 * Math.log(doc.get("rarity")) + 0.261);
+                const microtransactionRisk = (35.56 * doc.get("microtransactions"));
+                response.send({rarity: doc.get("rarity"), microtransactions: doc.get("microtransactions"), accountAge: doc.get("accountAge")});
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+            }).catch((error) => {
+                console.log("Error getting document:", error);
             });
-        });
 });
