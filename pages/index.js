@@ -4,8 +4,25 @@ import Typography from '@mui/material/Typography';
 import { Button, Card, CardContent, TextField } from '@mui/material';
 import Logo from '../src/Logo';
 import { Box } from '@mui/system';
+import { login } from '../src/middleware';
+import { useRouter } from 'next/dist/client/router';
 
 export default function Home() {
+    const [error, setError] = React.useState(false);
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const router = useRouter();
+
+    const submitButton = () => {
+        const loggedIn = login(username, password);
+
+        if (loggedIn) {
+            router.push('/input-page');
+        } else {
+            setError(true);
+        }
+    };
+
     return (
         <Container maxWidth="sm" sx={{ marginTop: '2rem' }}>
             <Card
@@ -58,6 +75,7 @@ export default function Home() {
                             InputLabelProps={{
                                 sx: { fontWeight: 700, color: '#bbb', fontSize: '0.9rem' },
                             }}
+                            onChange={(e) => setUsername(e.target.value)}
                         />
                         <br />
                         <TextField
@@ -65,16 +83,33 @@ export default function Home() {
                             variant="standard"
                             type="password"
                             fullWidth
-                            sx={{ marginTop: '1rem' }}
+                            sx={{ marginTop: '1rem', marginBottom: '0.5rem' }}
                             InputLabelProps={{
                                 sx: { fontWeight: 700, color: '#bbb', fontSize: '0.9rem' },
                             }}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                            }}
                         />
                         <br />
+                        {error ? (
+                            <Typography variant="p" sx={{ color: 'red' }}>
+                                Invalid credentials
+                            </Typography>
+                        ) : null}
                         <Box
                             sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
                         >
-                            <Button variant="contained" sx={{ color: 'white', marginTop: '2rem', minWidth: '15rem', borderRadius: 1000 }}>
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    color: 'white',
+                                    marginTop: '2rem',
+                                    minWidth: '15rem',
+                                    borderRadius: 1000,
+                                }}
+                                onClick={submitButton}
+                            >
                                 Sign In
                             </Button>
                         </Box>
